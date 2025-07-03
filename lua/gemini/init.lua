@@ -49,7 +49,7 @@ end
 
 function M.setup()
   check_and_install_gemini()
-  vim.api.nvim_set_keymap('n', '<leader>G', '<cmd>lua require("gemini").toggle_gemini_cli()<CR>', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>og', '<cmd>lua require("gemini").toggle_gemini_cli()<CR>', { noremap = true, silent = true })
 end
 
 return M
