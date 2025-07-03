@@ -52,6 +52,6 @@ require('gemini').setup()
 
 ## Usage
 
-Use the keymap `<leader>og` to open and close the Gemini CLI window.
+Use the keymap `<leader>G` to open and close the Gemini CLI window.
 
 When you first run the plugin, it will check if you have the `gemini` CLI installed. If not, it will prompt you to install it.

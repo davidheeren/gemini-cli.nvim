@@ -1,5 +1,8 @@
-
 local M = {}
+
+local state = {
+  bufnr = nil,
+}
 
 local function check_and_install_gemini()
   if vim.fn.executable('gemini') == 0 then
@@ -16,32 +19,37 @@ local function check_and_install_gemini()
 end
 
 function M.toggle_gemini_cli()
-    local buf_name = "gemini_cli"
-    local bufnr = vim.fn.bufnr(buf_name)
-    local winnr = vim.fn.bufwinnr(bufnr)
-
-    if winnr ~= -1 then
-        -- Window is visible, close it
-        vim.api.nvim_win_close(winnr, true)
-    else
-        -- Window is not visible, open it
-        vim.cmd("vsplit")
-        if bufnr ~= -1 then
-            -- Buffer exists, just show it
-            vim.cmd("buffer " .. bufnr)
+    -- Check if the buffer exists and is loaded
+    if state.bufnr and vim.api.nvim_buf_is_valid(state.bufnr) then
+        local winnr = vim.fn.bufwinnr(state.bufnr)
+        if winnr ~= -1 then
+            -- Window is visible, close it
+            vim.api.nvim_win_close(winnr, true)
         else
-            -- Buffer doesn't exist, create it and open terminal
-            vim.cmd("enew")
-            vim.api.nvim_buf_set_name(0, buf_name)
-            vim.cmd("setlocal buftype=nofile bufhidden=hide noswapfile")
-            vim.fn.termopen("gemini", {env = {["EDITOR"] = "nvim"}})
+            -- Buffer exists but is hidden, show it in a new split
+            vim.cmd("vsplit")
+            vim.cmd("buffer " .. state.bufnr)
         end
+    else
+        -- No buffer, so create one
+        vim.cmd("vsplit")
+        vim.cmd("enew")
+        vim.cmd("setlocal buftype=nofile bufhidden=hide noswapfile")
+        state.bufnr = vim.api.nvim_get_current_buf()
+        vim.api.nvim_buf_set_name(state.bufnr, "gemini_cli") -- for display
+        vim.fn.termopen("gemini", {
+            env = {["EDITOR"] = "nvim"},
+            on_exit = function()
+                -- When the user exits the terminal, clear the buffer number
+                state.bufnr = nil
+            end
+        })
     end
 end
 
 function M.setup()
   check_and_install_gemini()
-  vim.api.nvim_set_keymap('n', '<leader>og', '<cmd>lua require("gemini").toggle_gemini_cli()<CR>', { noremap = true, silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>G', '<cmd>lua require("gemini").toggle_gemini_cli()<CR>', { noremap = true, silent = true })
 end
 
 return M
