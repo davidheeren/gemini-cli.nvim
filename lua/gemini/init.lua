@@ -5,20 +5,6 @@ local state = {
 	winnr = nil,
 }
 
-local function check_and_install_gemini()
-	if vim.fn.executable("gemini") == 0 then
-		local answer = vim.fn.input("Gemini CLI not found. Install it now? (y/n): ")
-		if answer:lower() == "y" then
-			local cmd = "npm install -g @google/gemini-cli"
-			vim.fn.termopen(cmd, {
-				on_exit = function()
-					vim.notify("Gemini CLI installation finished. Please restart Neovim.")
-				end,
-			})
-		end
-	end
-end
-
 local function close_gemini_window()
 	if state.winnr and vim.api.nvim_win_is_valid(state.winnr) then
 		vim.api.nvim_win_close(state.winnr, true)
@@ -63,13 +49,26 @@ function M.toggle_gemini_cli()
 end
 
 function M.setup()
-	check_and_install_gemini()
-	vim.api.nvim_set_keymap(
-		"n",
-		"<leader>og",
-		'<cmd>lua require("gemini").toggle_gemini_cli()<CR>',
-		{ noremap = true, silent = true }
-	)
+	if vim.fn.executable("gemini") == 1 then
+		vim.api.nvim_set_keymap(
+			"n",
+			"<leader>og",
+			'<cmd>lua require("gemini").toggle_gemini_cli()<CR>',
+			{ noremap = true, silent = true }
+		)
+	else
+		local answer = vim.fn.input("Gemini CLI not found. Install it now? (y/n): ")
+		if answer:lower() == "y" then
+			local cmd = "npm install -g @google/gemini-cli"
+			vim.fn.termopen(cmd, {
+				on_exit = function()
+					vim.notify("Gemini CLI installation finished. Please restart Neovim to use the plugin.")
+				end,
+			})
+		else
+			vim.notify("Gemini CLI not found. The gemini.nvim plugin will not be loaded.", vim.log.levels.WARN)
+		end
+	end
 end
 
 return M
