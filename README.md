@@ -2,9 +2,7 @@
 
 A Neovim plugin to seamlessly integrate the Gemini CLI.
 
-
-https://github.com/user-attachments/assets/a40b8bab-9a9c-4654-878e-c6f03577585c
-
+<https://github.com/user-attachments/assets/a40b8bab-9a9c-4654-878e-c6f03577585c>
 
 ## Features
 
@@ -24,7 +22,7 @@ https://github.com/user-attachments/assets/a40b8bab-9a9c-4654-878e-c6f03577585c
 
 ```lua
 {
-  "jonroosevelt/gemini-cli",
+  "jonroosevelt/gemini-cli.nvim",
   config = function()
     require("gemini").setup()
   end,
@@ -35,7 +33,7 @@ https://github.com/user-attachments/assets/a40b8bab-9a9c-4654-878e-c6f03577585c
 
 ```lua
 use {
-  "jonroosevelt/gemini-cli",
+  "jonroosevelt/gemini-cli.nvim",
   config = function()
     require("gemini").setup()
   end,
@@ -45,7 +43,7 @@ use {
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'jonroosevelt/gemini-cli'
+Plug 'jonroosevelt/gemini-cli.nvim'
 ```
 
 And then in your `init.lua`:
