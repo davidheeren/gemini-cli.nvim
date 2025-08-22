@@ -1,5 +1,12 @@
 local M = {}
 
+-- Default configuration
+local default_config = {
+	split_direction = "vertical", -- "vertical" or "horizontal"
+}
+
+local config = {}
+
 local state = {
 	bufnr = nil,
 	winnr = nil,
@@ -22,7 +29,12 @@ local function open_gemini_window()
 		return
 	end
 
-	vim.cmd("vsplit")
+	-- Use configured split direction
+	if config.split_direction == "horizontal" then
+		vim.cmd("split")
+	else
+		vim.cmd("vsplit")
+	end
 	vim.cmd("enew")
 	vim.cmd("setlocal buftype=nofile bufhidden=hide noswapfile")
 	state.winnr = vim.api.nvim_get_current_win()
@@ -123,7 +135,10 @@ function M.send_to_gemini()
 	end
 end
 
-function M.setup()
+function M.setup(opts)
+	-- Merge user config with defaults
+	config = vim.tbl_deep_extend("force", default_config, opts or {})
+	
 	if vim.fn.executable("gemini") == 1 then
 		vim.api.nvim_set_keymap(
 			"n",
