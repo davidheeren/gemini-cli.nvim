@@ -6,7 +6,7 @@ A Neovim plugin to seamlessly integrate the Gemini CLI.
 
 ## Features
 
-- Toggle the Gemini CLI in a vertical split window.
+- Toggle the Gemini CLI in a split window (vertical or horizontal).
 - Automatically checks if the `gemini` CLI is installed on startup.
 - Prompts to install the `gemini` CLI if it's missing.
 - Sets the `EDITOR` environment variable to `nvim` for the Gemini CLI session, so you can use Neovim to edit files from within Gemini.
@@ -24,7 +24,9 @@ A Neovim plugin to seamlessly integrate the Gemini CLI.
 {
   "jonroosevelt/gemini-cli.nvim",
   config = function()
-    require("gemini").setup()
+    require("gemini").setup({
+      split_direction = "horizontal", -- optional: "vertical" (default) or "horizontal"
+    })
   end,
 }
 ```
@@ -35,7 +37,9 @@ A Neovim plugin to seamlessly integrate the Gemini CLI.
 use {
   "jonroosevelt/gemini-cli.nvim",
   config = function()
-    require("gemini").setup()
+    require("gemini").setup({
+      split_direction = "horizontal", -- optional: "vertical" (default) or "horizontal"
+    })
   end,
 }
 ```
@@ -50,6 +54,39 @@ And then in your `init.lua`:
 
 ```lua
 require('gemini').setup()
+```
+
+## Configuration
+
+The plugin can be configured with the following options:
+
+```lua
+require('gemini').setup({
+  split_direction = "horizontal", -- "vertical" (default) or "horizontal"
+})
+```
+
+### Configuration Options
+
+- `split_direction`: Controls how the Gemini CLI window opens
+  - `"vertical"` (default): Opens in a vertical split (side by side)
+  - `"horizontal"`: Opens in a horizontal split (top and bottom)
+
+### Examples
+
+#### Vertical Split (Default)
+```lua
+require('gemini').setup() -- or
+require('gemini').setup({
+  split_direction = "vertical"
+})
+```
+
+#### Horizontal Split
+```lua
+require('gemini').setup({
+  split_direction = "horizontal"
+})
 ```
 
 ## Usage
