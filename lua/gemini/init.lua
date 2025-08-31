@@ -144,13 +144,13 @@ function M.setup(opts)
     if vim.fn.executable("gemini") == 1 then
         vim.api.nvim_set_keymap(
             "n",
-            opts.open_keymap,
+            config.open_keymap,
             '<cmd>lua require("gemini").toggle_gemini_cli()<CR>',
             { noremap = true, silent = true, desc = "Toggle Gemini CLI" }
         )
         vim.api.nvim_set_keymap(
             "v",
-            opts.send_keymap,
+            config.send_keymap,
             ':<C-U>lua require("gemini").send_to_gemini()<CR>',
             { noremap = true, silent = true, desc = "Send selection to Gemini" }
         )
@@ -160,4 +160,3 @@ function M.setup(opts)
 end
 
 return M
-
